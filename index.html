@@ -735,33 +735,26 @@ function buildQtyGrid(ed){
   const labels = document.getElementById('qty-slider-labels');
   const note   = document.getElementById('qty-note');
 
-  const opts = ed.qtyOpts;           // ex: [7, 9, 11, 13]
-  const suggested = opts[0];         // primeira = sugerido
-  const minV = opts[0];
-  const maxV = opts[opts.length-1];
+  const suggested = ed.qtyOpts[0];  // primeira opção = sugerido
 
-  slider.min   = minV;
-  slider.max   = maxV;
+  slider.min   = 1;
+  slider.max   = 100;
   slider.value = suggested;
-  slider.step  = 1;                  // passo livre entre min e max
+  slider.step  = 1;
   updateSliderTrack(slider);
 
   badge.textContent = suggested + (suggested===1?' pedra':' pedras');
   S.qty = suggested;
 
-  // Labels: min, sugerido (ouro), max
+  // Só mostra o sugerido, sem min/max
   labels.innerHTML = '';
-  const labelVals = [...new Set([minV, suggested, maxV])];
-  labelVals.forEach(v=>{
-    const s = document.createElement('span');
-    s.textContent = v + (v===suggested?' ✦':'');
-    if(v===suggested) s.className='rec-mark';
-    labels.appendChild(s);
-  });
+  const mark = document.createElement('span');
+  mark.className = 'rec-mark';
+  mark.textContent = '✦ ' + suggested + ' pedras — sugerido para este estilo';
+  labels.appendChild(mark);
 
   note.textContent = ed.qtyNote;
 
-  // Já desbloqueia step-5 imediatamente (sugerido já está setado)
   unlock('step-5');
   renderOrder(); updatePrice();
 }
